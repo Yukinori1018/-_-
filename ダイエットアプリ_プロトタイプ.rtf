@@ -1,0 +1,525 @@
+{\rtf1\ansi\ansicpg932\cocoartf2822
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="ja">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">\
+    <title>Squad Fit - 5\uc0\u20154 \u12481 \u12540 \u12512 \u12480 \u12452 \u12456 \u12483 \u12488 </title>\
+    <!-- Tailwind CSS -->\
+    <script src="https://cdn.tailwindcss.com"></script>\
+    <!-- Chart.js -->\
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>\
+    <!-- Font Awesome -->\
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">\
+    <!-- Google Fonts -->\
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">\
+    \
+    <style>\
+        body \{ \
+            font-family: 'Noto Sans JP', 'Helvetica Neue', Arial, sans-serif; \
+            background-color: #f3f4f6; \
+            overscroll-behavior-y: none;\
+            -webkit-tap-highlight-color: transparent;\
+        \}\
+        /* \uc0\u12473 \u12463 \u12525 \u12540 \u12523 \u12496 \u12540 \u38750 \u34920 \u31034 \u65288 \u12450 \u12503 \u12522 \u24863 \u65289  */\
+        ::-webkit-scrollbar \{ width: 0px; background: transparent; \}\
+        \
+        .glass-card \{ \
+            background: white; \
+            border-radius: 16px; \
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); \
+            transition: transform 0.2s;\
+        \}\
+        .rank-1 \{ border-left: 5px solid #FFD700; background: linear-gradient(to right, #fffdf0, #ffffff); \}\
+        .rank-2 \{ border-left: 5px solid #C0C0C0; \}\
+        .rank-3 \{ border-left: 5px solid #CD7F32; \}\
+        \
+        @keyframes pop \{\
+            0% \{ transform: scale(1); \}\
+            50% \{ transform: scale(1.2); \}\
+            100% \{ transform: scale(1); \}\
+        \}\
+        .pop-anim \{ animation: pop 0.3s ease-out; \}\
+        \
+        /* \uc0\u30011 \u38754 \u20999 \u12426 \u26367 \u12360 \u12450 \u12491 \u12513 \u12540 \u12471 \u12519 \u12531  */\
+        .fade-in \{ animation: fadeIn 0.3s ease-in-out; \}\
+        @keyframes fadeIn \{\
+            from \{ opacity: 0; transform: translateY(10px); \}\
+            to \{ opacity: 1; transform: translateY(0); \}\
+        \}\
+\
+        /* \uc0\u12514 \u12540 \u12480 \u12523  */\
+        .modal-overlay \{\
+            background-color: rgba(0,0,0,0.5);\
+            backdrop-filter: blur(4px);\
+        \}\
+        \
+        /* \uc0\u12450 \u12463 \u12486 \u12451 \u12502 \u12394 \u12490 \u12499 \u12466 \u12540 \u12471 \u12519 \u12531 \u12450 \u12452 \u12467 \u12531  */\
+        .nav-active \{ color: #14b8a6; \}\
+        .nav-inactive \{ color: #9ca3af; \}\
+    </style>\
+</head>\
+<body class="text-gray-800 h-screen flex flex-col overflow-hidden">\
+\
+    <!-- Header -->\
+    <header class="bg-gradient-to-r from-teal-500 to-blue-600 text-white p-4 z-50 shadow-lg flex-none">\
+        <div class="flex justify-between items-center max-w-md mx-auto w-full">\
+            <h1 class="text-lg font-bold flex items-center gap-2" id="headerTitle">\
+                <i class="fas fa-fire-alt text-orange-300"></i> \uc0\u33026 \u32938 \u29123 \u28988 \u38538 \
+            </h1>\
+            <div class="flex items-center gap-2">\
+                <span class="text-xs bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">Day 12</span>\
+                <button class="text-white/80 hover:text-white"><i class="fas fa-bell"></i></button>\
+            </div>\
+        </div>\
+    </header>\
+\
+    <!-- Main Content Area (Scrollable) -->\
+    <main class="flex-1 overflow-y-auto pb-24 relative w-full max-w-md mx-auto" id="mainContainer">\
+        \
+        <!-- ================= VIEW: HOME ================= -->\
+        <div id="view-home" class="p-4 space-y-5 fade-in">\
+            <!-- Team KPI -->\
+            <section class="glass-card p-5 text-center relative overflow-hidden">\
+                <div class="absolute -top-10 -right-10 w-24 h-24 bg-blue-100 rounded-full opacity-50"></div>\
+                <div class="flex justify-between items-end mb-1">\
+                    <h2 class="text-gray-500 text-xs font-bold uppercase tracking-wider">\uc0\u12481 \u12540 \u12512 \u21512 \u35336 \u28187 \u37327 </h2>\
+                    <span class="text-xs text-teal-600 font-bold bg-teal-50 px-2 py-0.5 rounded">\uc0\u30446 \u27161 \u12414 \u12391 \u12354 \u12392  7.6kg</span>\
+                </div>\
+                <div class="flex items-baseline justify-center gap-1 my-2">\
+                    <span class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-teal-600 to-blue-600">-12.4</span>\
+                    <span class="text-lg text-gray-400 font-bold">kg</span>\
+                </div>\
+                <div class="relative pt-1">\
+                    <div class="flex mb-2 items-center justify-between">\
+                        <div class="text-right w-full"><span class="text-xs font-semibold inline-block text-blue-600">62% \uc0\u36948 \u25104 </span></div>\
+                    </div>\
+                    <div class="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-100">\
+                        <div style="width:62%" class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-gradient-to-r from-teal-400 to-blue-500 w-0 transition-all duration-1000" id="progressBar"></div>\
+                    </div>\
+                </div>\
+            </section>\
+\
+            <!-- Quick Weight Input -->\
+            <section class="glass-card p-5">\
+                <div class="flex justify-between items-center mb-4">\
+                    <h3 class="font-bold text-sm text-gray-700"><i class="fas fa-weight-scale text-teal-500 mr-2"></i>\uc0\u20170 \u26085 \u12398 \u28204 \u23450 </h3>\
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">You: \uc0\u30000 \u20013 </span>\
+                </div>\
+                <div class="flex gap-3">\
+                    <div class="relative flex-1">\
+                        <input type="number" id="weightInput" placeholder="\uc0\u20307 \u37325 " class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-lg rounded-lg focus:ring-teal-500 focus:border-teal-500 block w-full p-2.5 pl-4 outline-none" step="0.1">\
+                        <span class="absolute right-4 top-3 text-gray-400 text-sm">kg</span>\
+                    </div>\
+                    <button onclick="handleUpdateWeight()" class="bg-gradient-to-r from-teal-500 to-teal-600 text-white px-6 py-2 rounded-lg font-bold shadow-md active:scale-95 flex items-center gap-2">\
+                        <span>\uc0\u35352 \u37682 </span>\
+                    </button>\
+                </div>\
+                <div id="feedbackArea" class="hidden mt-3 bg-teal-50 text-teal-700 p-3 rounded-lg text-xs border border-teal-100 flex items-center gap-2">\
+                    <i class="fas fa-check-circle text-teal-500"></i><span>\uc0\u35352 \u37682 \u12375 \u12414 \u12375 \u12383 \u65281 </span>\
+                </div>\
+            </section>\
+\
+            <!-- Ranking -->\
+            <section class="glass-card p-0 overflow-hidden">\
+                <div class="p-4 border-b border-gray-100 bg-gray-50 flex justify-between items-center">\
+                    <div>\
+                        <h3 class="font-bold text-sm text-gray-700"><i class="fas fa-trophy text-yellow-500 mr-2"></i>\uc0\u28187 \u37327 \u29575 \u12521 \u12531 \u12461 \u12531 \u12464 </h3>\
+                        <p class="text-[10px] text-gray-400 mt-0.5">\uc0\u38283 \u22987 \u20307 \u37325 \u12363 \u12425 \u12398 \u28187 \u23569 \u29575 (%)</p>\
+                    </div>\
+                    <button class="text-xs text-blue-500 font-bold"><i class="fas fa-sort mr-1"></i>\uc0\u20006 \u26367 </button>\
+                </div>\
+                <div id="rankingList"></div> <!-- JS Injected -->\
+            </section>\
+\
+            <!-- Timeline -->\
+            <section class="glass-card p-4">\
+                <div class="flex justify-between items-center mb-3">\
+                    <h3 class="font-bold text-sm text-gray-700">\uc0\u12415 \u12435 \u12394 \u12398 \u27963 \u21205 </h3>\
+                </div>\
+                <div class="space-y-4" id="timeline">\
+                    <div class="flex gap-3 items-start">\
+                        <div class="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-pink-500 font-bold text-sm border-2 border-white shadow-sm">S</div>\
+                        <div class="bg-gray-50 p-3 rounded-2xl rounded-tl-none text-sm flex-1">\
+                            <div class="flex justify-between items-baseline mb-1"><span class="font-bold text-xs text-gray-700">\uc0\u20304 \u34276 </span><span class="text-[10px] text-gray-400">10\u20998 \u21069 </span></div>\
+                            <p class="text-gray-600 text-xs">\uc0\u26152 \u26085 \u12398 \u22812 \u12289 \u12521 \u12540 \u12513 \u12531 \u25105 \u24930 \u12375 \u12414 \u12375 \u12383 ...\u65281 \u55357 \u56877 </p>\
+                            <div class="mt-2 flex gap-4"><button class="text-gray-400 hover:text-pink-500 text-xs" onclick="like(this)"><i class="far fa-heart"></i> <span>3</span></button></div>\
+                        </div>\
+                    </div>\
+                    <div class="flex gap-3 items-start">\
+                        <div class="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-500 font-bold text-sm border-2 border-white shadow-sm">Y</div>\
+                        <div class="bg-gray-50 p-3 rounded-2xl rounded-tl-none text-sm flex-1">\
+                            <div class="flex justify-between items-baseline mb-1"><span class="font-bold text-xs text-gray-700">\uc0\u23665 \u26412 </span><span class="text-[10px] text-gray-400">1\u26178 \u38291 \u21069 </span></div>\
+                            <p class="text-gray-600 text-xs">\uc0\u12472 \u12512 \u12391 \u12521 \u12531 \u12491 \u12531 \u12464 30\u20998 \u23436 \u20102 \u12290 </p>\
+                            <div class="mt-2 flex gap-4"><button class="text-gray-400 hover:text-pink-500 text-xs" onclick="like(this)"><i class="far fa-heart"></i> <span>5</span></button></div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </section>\
+        </div>\
+\
+        <!-- ================= VIEW: ANALYSIS ================= -->\
+        <div id="view-analysis" class="p-4 space-y-5 hidden fade-in">\
+            <section class="glass-card p-5">\
+                <h3 class="font-bold text-gray-700 mb-4 text-sm border-l-4 border-teal-500 pl-3">\uc0\u20307 \u37325 \u25512 \u31227 \u12464 \u12521 \u12501 </h3>\
+                <div class="flex justify-center gap-2 mb-4 text-xs">\
+                    <button class="bg-teal-100 text-teal-700 px-3 py-1 rounded-full font-bold">1\uc0\u36913 \u38291 </button>\
+                    <button class="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">1\uc0\u12534 \u26376 </button>\
+                    <button class="bg-gray-100 text-gray-500 px-3 py-1 rounded-full">\uc0\u20840 \u26399 \u38291 </button>\
+                </div>\
+                <div class="h-64">\
+                    <canvas id="teamChart"></canvas>\
+                </div>\
+            </section>\
+\
+            <section class="glass-card p-5">\
+                <h3 class="font-bold text-gray-700 mb-4 text-sm border-l-4 border-blue-500 pl-3">\uc0\u20491 \u20154 \u12473 \u12479 \u12483 \u12484  (\u30000 \u20013 )</h3>\
+                <div class="grid grid-cols-2 gap-4">\
+                    <div class="bg-blue-50 p-3 rounded-lg text-center">\
+                        <div class="text-xs text-gray-500 mb-1">\uc0\u29694 \u22312 \u12398 BMI</div>\
+                        <div class="text-2xl font-bold text-blue-600">23.4</div>\
+                        <div class="text-[10px] text-green-500">\uc0\u36969 \u27491 \u31684 \u22258 \u20869 </div>\
+                    </div>\
+                    <div class="bg-orange-50 p-3 rounded-lg text-center">\
+                        <div class="text-xs text-gray-500 mb-1">\uc0\u36899 \u32154 \u35352 \u37682 \u26085 \u25968 </div>\
+                        <div class="text-2xl font-bold text-orange-500">12\uc0\u26085 </div>\
+                        <div class="text-[10px] text-orange-400">\uc0\u55357 \u56613  Hot Streak!</div>\
+                    </div>\
+                </div>\
+            </section>\
+        </div>\
+\
+        <!-- ================= VIEW: FOOD ================= -->\
+        <div id="view-food" class="p-4 space-y-5 hidden fade-in">\
+            <section class="glass-card p-5 bg-gradient-to-br from-green-50 to-white">\
+                <div class="flex justify-between items-center">\
+                    <div>\
+                        <h3 class="font-bold text-gray-700 text-sm">\uc0\u26412 \u26085 \u12398 \u25666 \u21462 \u12459 \u12525 \u12522 \u12540 </h3>\
+                        <p class="text-xs text-gray-500">\uc0\u30446 \u27161 : 2,000 kcal</p>\
+                    </div>\
+                    <div class="text-2xl font-bold text-green-600">1,240 <span class="text-sm text-gray-400">kcal</span></div>\
+                </div>\
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-3">\
+                    <div class="bg-green-500 h-2 rounded-full" style="width: 62%"></div>\
+                </div>\
+            </section>\
+\
+            <div class="space-y-3">\
+                <div class="glass-card p-4 flex items-center gap-4">\
+                    <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center text-orange-500 text-xl"><i class="fas fa-coffee"></i></div>\
+                    <div class="flex-1">\
+                        <div class="flex justify-between">\
+                            <h4 class="font-bold text-sm text-gray-700">\uc0\u26397 \u39135 </h4>\
+                            <span class="text-xs font-bold text-gray-600">450 kcal</span>\
+                        </div>\
+                        <p class="text-xs text-gray-400">\uc0\u12488 \u12540 \u12473 \u12488 \u12289 \u30446 \u29577 \u28988 \u12365 \u12289 \u12467 \u12540 \u12498 \u12540 </p>\
+                    </div>\
+                    <button class="text-gray-300 hover:text-gray-500"><i class="fas fa-edit"></i></button>\
+                </div>\
+\
+                <div class="glass-card p-4 flex items-center gap-4">\
+                    <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center text-red-500 text-xl"><i class="fas fa-utensils"></i></div>\
+                    <div class="flex-1">\
+                        <div class="flex justify-between">\
+                            <h4 class="font-bold text-sm text-gray-700">\uc0\u26172 \u39135 </h4>\
+                            <span class="text-xs font-bold text-gray-600">790 kcal</span>\
+                        </div>\
+                        <p class="text-xs text-gray-400">\uc0\u29983 \u23004 \u28988 \u12365 \u23450 \u39135 </p>\
+                    </div>\
+                    <button class="text-gray-300 hover:text-gray-500"><i class="fas fa-edit"></i></button>\
+                </div>\
+\
+                <div class="glass-card p-4 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center text-gray-400 py-6 hover:bg-gray-50 transition cursor-pointer" onclick="openModal('meal')">\
+                    <i class="fas fa-plus-circle text-2xl mb-2 text-teal-500"></i>\
+                    <span class="text-xs font-bold">\uc0\u22805 \u39135 \u12434 \u36861 \u21152 </span>\
+                </div>\
+            </div>\
+        </div>\
+\
+        <!-- ================= VIEW: SETTINGS ================= -->\
+        <div id="view-settings" class="p-4 space-y-5 hidden fade-in">\
+            <section class="glass-card p-6 text-center">\
+                <div class="w-20 h-20 bg-teal-500 rounded-full mx-auto mb-3 flex items-center justify-center text-white text-3xl font-bold border-4 border-teal-100">\
+                    \uc0\u30000 \
+                </div>\
+                <h2 class="font-bold text-lg text-gray-800">\uc0\u30000 \u20013  \u20581 \u22826 </h2>\
+                <p class="text-xs text-gray-500 mb-4">\uc0\u12481 \u12540 \u12512 \u65306 \u33026 \u32938 \u29123 \u28988 \u38538  (\u12522 \u12540 \u12480 \u12540 )</p>\
+                <button class="text-xs bg-gray-100 text-gray-600 px-4 py-2 rounded-full font-bold hover:bg-gray-200">\uc0\u12503 \u12525 \u12501 \u12451 \u12540 \u12523 \u32232 \u38598 </button>\
+            </section>\
+\
+            <section class="glass-card overflow-hidden">\
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center">\
+                    <span class="text-sm font-bold text-gray-700">\uc0\u36890 \u30693 \u35373 \u23450 </span>\
+                    <div class="w-10 h-6 bg-teal-500 rounded-full relative cursor-pointer">\
+                        <div class="w-4 h-4 bg-white rounded-full absolute right-1 top-1 shadow-sm"></div>\
+                    </div>\
+                </div>\
+                <div class="p-4 border-b border-gray-100 flex justify-between items-center">\
+                    <span class="text-sm font-bold text-gray-700">\uc0\u12503 \u12521 \u12452 \u12496 \u12471 \u12540 \u35373 \u23450 </span>\
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>\
+                </div>\
+                <div class="p-4 flex justify-between items-center cursor-pointer hover:bg-gray-50">\
+                    <span class="text-sm font-bold text-gray-700">\uc0\u12504 \u12523 \u12503 \u12539 \u12362 \u21839 \u12356 \u21512 \u12431 \u12379 </span>\
+                    <i class="fas fa-chevron-right text-gray-300 text-xs"></i>\
+                </div>\
+            </section>\
+\
+            <button class="w-full bg-white text-red-500 font-bold py-4 rounded-xl shadow-sm text-sm hover:bg-red-50">\
+                \uc0\u12525 \u12464 \u12450 \u12454 \u12488 \
+            </button>\
+            <div class="text-center text-[10px] text-gray-400 mt-4">Version 1.0.2</div>\
+        </div>\
+\
+    </main>\
+\
+    <!-- MODAL: QUICK ADD -->\
+    <div id="modal-add" class="fixed inset-0 z-[100] hidden flex items-end justify-center sm:items-center">\
+        <div class="absolute inset-0 modal-overlay" onclick="closeModal()"></div>\
+        <div class="bg-white w-full max-w-md rounded-t-2xl sm:rounded-2xl p-6 relative z-10 transform transition-transform duration-300 translate-y-0">\
+            <div class="w-12 h-1 bg-gray-300 rounded-full mx-auto mb-6 sm:hidden"></div>\
+            <h3 class="text-lg font-bold text-gray-800 mb-4 text-center">\uc0\u35352 \u37682 \u12434 \u36861 \u21152 </h3>\
+            \
+            <div class="grid grid-cols-3 gap-4 mb-6">\
+                <button class="flex flex-col items-center gap-2 p-4 rounded-xl bg-teal-50 hover:bg-teal-100 text-teal-700 transition">\
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-xl"><i class="fas fa-weight-scale"></i></div>\
+                    <span class="text-xs font-bold">\uc0\u20307 \u37325 </span>\
+                </button>\
+                <button class="flex flex-col items-center gap-2 p-4 rounded-xl bg-orange-50 hover:bg-orange-100 text-orange-600 transition">\
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-xl"><i class="fas fa-utensils"></i></div>\
+                    <span class="text-xs font-bold">\uc0\u39135 \u20107 </span>\
+                </button>\
+                <button class="flex flex-col items-center gap-2 p-4 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 transition">\
+                    <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm text-xl"><i class="fas fa-running"></i></div>\
+                    <span class="text-xs font-bold">\uc0\u36939 \u21205 </span>\
+                </button>\
+            </div>\
+\
+            <button onclick="closeModal()" class="w-full bg-gray-100 text-gray-600 font-bold py-3 rounded-xl hover:bg-gray-200">\uc0\u12461 \u12515 \u12531 \u12475 \u12523 </button>\
+        </div>\
+    </div>\
+\
+    <!-- Bottom Navigation -->\
+    <nav class="fixed bottom-0 w-full bg-white/95 backdrop-blur-md border-t border-gray-200 pb-safe pt-2 px-4 flex justify-between text-gray-400 max-w-md mx-auto left-0 right-0 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-40 select-none" style="padding-bottom: env(safe-area-inset-bottom, 20px);">\
+        \
+        <button onclick="switchView('home')" class="nav-btn nav-active flex flex-col items-center gap-1 w-14 transition-colors" id="btn-home">\
+            <i class="fas fa-home text-xl mb-0.5"></i>\
+            <span class="text-[9px] font-medium">\uc0\u12507 \u12540 \u12512 </span>\
+        </button>\
+        \
+        <button onclick="switchView('analysis')" class="nav-btn nav-inactive flex flex-col items-center gap-1 w-14 transition-colors" id="btn-analysis">\
+            <i class="fas fa-chart-pie text-xl mb-0.5"></i>\
+            <span class="text-[9px] font-medium">\uc0\u20998 \u26512 </span>\
+        </button>\
+        \
+        <!-- Center Plus Button -->\
+        <div class="relative -top-6">\
+            <button onclick="openModal('add')" class="bg-gradient-to-tr from-teal-400 to-teal-600 hover:to-teal-700 text-white w-14 h-14 rounded-full shadow-lg flex items-center justify-center transform transition active:scale-90 ring-4 ring-white">\
+                <i class="fas fa-plus text-2xl"></i>\
+            </button>\
+        </div>\
+        \
+        <button onclick="switchView('food')" class="nav-btn nav-inactive flex flex-col items-center gap-1 w-14 transition-colors" id="btn-food">\
+            <i class="fas fa-utensils text-xl mb-0.5"></i>\
+            <span class="text-[9px] font-medium">\uc0\u39135 \u20107 </span>\
+        </button>\
+        \
+        <button onclick="switchView('settings')" class="nav-btn nav-inactive flex flex-col items-center gap-1 w-14 transition-colors" id="btn-settings">\
+            <i class="fas fa-user text-xl mb-0.5"></i>\
+            <span class="text-[9px] font-medium">\uc0\u35373 \u23450 </span>\
+        </button>\
+    </nav>\
+\
+    <script>\
+        // --- Data & State ---\
+        const members = [\
+            \{ name: "\uc0\u37428 \u26408 ", initial: 80, current: 76.5, color: '#3b82f6', status: 'down' \},\
+            \{ name: "\uc0\u20304 \u34276 ", initial: 60, current: 58.2, color: '#ec4899', status: 'flat' \},\
+            \{ name: "\uc0\u30000 \u20013 ", initial: 75, current: 73.5, color: '#14b8a6', isMe: true, status: 'down' \}, \
+            \{ name: "\uc0\u39640 \u27211 ", initial: 90, current: 88.0, color: '#f59e0b', status: 'up' \},\
+            \{ name: "\uc0\u23665 \u26412 ", initial: 70, current: 69.5, color: '#6366f1', status: 'down' \}\
+        ];\
+        let myChart = null;\
+\
+        // --- Navigation & View Logic ---\
+        function switchView(viewId) \{\
+            // Hide all views\
+            document.querySelectorAll('[id^="view-"]').forEach(el => \{\
+                el.classList.add('hidden');\
+                el.classList.remove('fade-in');\
+            \});\
+            \
+            // Show selected view\
+            const target = document.getElementById(`view-$\{viewId\}`);\
+            target.classList.remove('hidden');\
+            // Re-trigger animation\
+            void target.offsetWidth; \
+            target.classList.add('fade-in');\
+\
+            // Update Header Title based on View\
+            const headerTitle = document.getElementById('headerTitle');\
+            const titles = \{\
+                'home': '<i class="fas fa-fire-alt text-orange-300"></i> \uc0\u33026 \u32938 \u29123 \u28988 \u38538 ',\
+                'analysis': '\uc0\u35443 \u32048 \u20998 \u26512 ',\
+                'food': '\uc0\u39135 \u20107 \u35352 \u37682 ',\
+                'settings': '\uc0\u35373 \u23450 '\
+            \};\
+            headerTitle.innerHTML = titles[viewId] || 'Squad Fit';\
+\
+            // Update Nav State\
+            document.querySelectorAll('.nav-btn').forEach(btn => \{\
+                btn.classList.remove('nav-active', 'text-teal-500');\
+                btn.classList.add('nav-inactive', 'text-gray-400');\
+            \});\
+            const activeBtn = document.getElementById(`btn-$\{viewId\}`);\
+            if(activeBtn) \{\
+                activeBtn.classList.remove('nav-inactive', 'text-gray-400');\
+                activeBtn.classList.add('nav-active', 'text-teal-500');\
+            \}\
+\
+            // Scroll to top\
+            document.getElementById('mainContainer').scrollTop = 0;\
+\
+            // If analysis view, ensure chart is rendered\
+            if (viewId === 'analysis' && !myChart) \{\
+                setTimeout(initChart, 100);\
+            \} else if (viewId === 'analysis' && myChart) \{\
+                myChart.update();\
+            \}\
+        \}\
+\
+        function openModal(type) \{\
+            document.getElementById('modal-add').classList.remove('hidden');\
+        \}\
+\
+        function closeModal() \{\
+            document.getElementById('modal-add').classList.add('hidden');\
+        \}\
+\
+        // --- Business Logic ---\
+        function calculateStats(member) \{\
+            const loss = member.initial - member.current;\
+            const pct = (loss / member.initial) * 100;\
+            return \{ ...member, loss: loss.toFixed(1), pct: pct.toFixed(2) \};\
+        \}\
+\
+        function renderRanking() \{\
+            const list = document.getElementById('rankingList');\
+            list.innerHTML = '';\
+            const sortedMembers = members.map(calculateStats).sort((a, b) => b.pct - a.pct);\
+\
+            sortedMembers.forEach((m, index) => \{\
+                const rankClass = index === 0 ? 'rank-1' : (index === 1 ? 'rank-2' : (index === 2 ? 'rank-3' : ''));\
+                const rankDisplay = index === 0 \
+                    ? `<div class="w-6 flex justify-center"><i class="fas fa-trophy text-yellow-500 text-lg"></i></div>`\
+                    : `<div class="font-bold text-gray-400 w-6 text-lg text-center">$\{index + 1\}</div>`;\
+                const meBadge = m.isMe ? '<span class="ml-2 text-[10px] bg-teal-100 text-teal-600 px-1.5 py-0.5 rounded font-bold">YOU</span>' : '';\
+\
+                list.innerHTML += `\
+                <div class="flex items-center p-3 border-b border-gray-50 hover:bg-gray-50 transition-colors $\{rankClass\}">\
+                    $\{rankDisplay\}\
+                    <div class="relative mx-3">\
+                        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-white font-bold shadow-sm text-sm" style="background-color: $\{m.color\}">$\{m.name.charAt(0)\}</div>\
+                         $\{index === 0 ? '<div class="absolute -top-1 -right-1 text-xs animate-bounce">\uc0\u55357 \u56613 </div>' : ''\}\
+                    </div>\
+                    <div class="flex-1 min-w-0">\
+                        <div class="flex items-center"><div class="font-bold text-gray-800 text-sm truncate">$\{m.name\}</div>$\{meBadge\}</div>\
+                        <div class="text-[10px] text-gray-400 truncate">\uc0\u30446 \u27161 \u12414 \u12391 \u12354 \u12392  $\{(m.current - (m.initial * 0.9)).toFixed(1)\}kg</div>\
+                    </div>\
+                    <div class="text-right pl-2">\
+                        <div class="font-bold text-teal-600 text-lg leading-none">-$\{m.pct\}<span class="text-xs">%</span></div>\
+                        <div class="text-[10px] text-gray-400 mt-1">total -$\{m.loss\}kg</div>\
+                    </div>\
+                </div>`;\
+            \});\
+        \}\
+\
+        function handleUpdateWeight() \{\
+            const input = document.getElementById('weightInput');\
+            const feedbackArea = document.getElementById('feedbackArea');\
+            if(input.value && parseFloat(input.value) > 0) \{\
+                const me = members.find(m => m.isMe);\
+                me.current = parseFloat(input.value);\
+                input.value = '';\
+                feedbackArea.classList.remove('hidden');\
+                renderRanking();\
+                if(myChart) updateChartData();\
+                setTimeout(() => feedbackArea.classList.add('hidden'), 3000);\
+            \}\
+        \}\
+\
+        function like(btn) \{\
+            const countSpan = btn.querySelector('span');\
+            let count = parseInt(countSpan.innerText);\
+            if (!btn.classList.contains('text-pink-500')) \{\
+                btn.classList.remove('text-gray-400');\
+                btn.classList.add('text-pink-500', 'pop-anim');\
+                btn.querySelector('i').classList.replace('far', 'fas');\
+                countSpan.innerText = count + 1;\
+                setTimeout(() => btn.classList.remove('pop-anim'), 300);\
+            \}\
+        \}\
+\
+        // --- Chart ---\
+        function initChart() \{\
+            const ctx = document.getElementById('teamChart');\
+            if(!ctx) return;\
+            \
+            const labels = ['1\uc0\u36913 \u38291 \u21069 ', '5\u26085 \u21069 ', '3\u26085 \u21069 ', '1\u26085 \u21069 ', '\u20170 \u26085 '];\
+            const datasets = members.map(m => \{\
+                const range = m.initial - m.current;\
+                const data = [m.initial, m.initial-(range*0.2), m.initial-(range*0.5), m.initial-(range*0.8), m.current]\
+                    .map(v => v + (Math.random()*0.5 - 0.25));\
+                return \{\
+                    label: m.name,\
+                    data: data,\
+                    borderColor: m.color,\
+                    backgroundColor: m.color,\
+                    tension: 0.4,\
+                    pointRadius: 2,\
+                    borderWidth: 2\
+                \};\
+            \});\
+\
+            myChart = new Chart(ctx.getContext('2d'), \{\
+                type: 'line',\
+                data: \{ labels, datasets \},\
+                options: \{\
+                    responsive: true,\
+                    maintainAspectRatio: false,\
+                    interaction: \{ mode: 'index', intersect: false \},\
+                    plugins: \{\
+                        legend: \{ position: 'bottom', labels: \{ boxWidth: 8, usePointStyle: true, font: \{ size: 10 \} \} \},\
+                        tooltip: \{ backgroundColor: 'rgba(255,255,255,0.9)', titleColor:'#333', bodyColor:'#666', borderColor:'#ddd', borderWidth:1 \}\
+                    \},\
+                    scales: \{\
+                        y: \{ display: true, grid: \{ color: '#f0f0f0' \}, ticks: \{ font:\{size:10\}, color:'#9ca3af' \} \},\
+                        x: \{ grid: \{ display: false \}, ticks: \{ font:\{size:10\}, color:'#9ca3af' \} \}\
+                    \}\
+                \}\
+            \});\
+        \}\
+        \
+        function updateChartData() \{\
+            if(!myChart) return;\
+            const me = members.find(m => m.isMe);\
+            const myDataset = myChart.data.datasets.find(d => d.label === me.name);\
+            if(myDataset) \{\
+                myDataset.data[4] = me.current; // Update 'Today'\
+                myChart.update();\
+            \}\
+        \}\
+\
+        // Init\
+        window.onload = () => \{\
+            renderRanking();\
+            setTimeout(() => document.getElementById('progressBar').style.width = '62%', 500);\
+        \};\
+    </script>\
+</body>\
+</html>}
