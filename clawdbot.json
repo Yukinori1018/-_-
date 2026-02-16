@@ -1,0 +1,65 @@
+{
+  "bindings": [
+    {
+      "agentId": "minimax-bot",
+      "match": {
+        "channel": "discord",
+        "accountId": "clawd_minimax"
+      }
+    },
+    {
+      "agentId": "main",
+      "match": {
+        "channel": "discord",
+        "accountId": "clawd_claude"
+      }
+    }
+  ],
+  "channels": {
+    "discord": {
+      "accounts": {
+        "clawd_minimax": {
+          "enabled": true,
+          "token": "YOUR_MINIMAX_BOT_TOKEN"
+        },
+        "clawd_claude": {
+          "enabled": true,
+          "token": "YOUR_CLAUDE_BOT_TOKEN"
+        }
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-3-haiku-20240307"
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "model": "anthropic/claude-3-haiku-20240307"
+      },
+      {
+        "id": "minimax-bot",
+        "model": "minimax/MiniMax-M2.1"
+      }
+    ]
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "minimax": {
+        "baseUrl": "https://api.minimax.io/anthropic",
+        "api": "anthropic-messages",
+        "models": [
+          {
+            "id": "MiniMax-M2.1",
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  }
+}
