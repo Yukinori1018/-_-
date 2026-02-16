@@ -38,14 +38,7 @@
     "list": [
       {
         "id": "main",
-        "model": "minimax/MiniMax-M2.1",
-        "version": "2026.1.24-3",
-        "timezone": "Asia/Tokyo",
-        "context": {
-          "input": 48000,
-          "total": 205000,
-          "utilization": "24%"
-        }
+        "model": "anthropic/claude-3-haiku-20240307"
       },
       {
         "id": "minimax-bot",
