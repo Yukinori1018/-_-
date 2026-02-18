@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  openclaw-gateway:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-alpha
+    restart: unless-stopped
+    ports:
+      - "18789:18789"
+    volumes:
+      - ./data:/data
+      - ./workspace:/app/workspace
+    env_file:
+      - .env
+    environment:
+      - OPENCLAW_INSTANCE_NAME=alpha
+    security_opt:
+      - no-new-privileges:true
+
+  openclaw-cli:
+    image: ghcr.io/openclaw/openclaw:latest
+    container_name: openclaw-alpha-cli
+    volumes:
+      - ./data:/data
+      - ./workspace:/app/workspace
+    env_file:
+      - .env
+    environment:
+      - OPENCLAW_INSTANCE_NAME=alpha
+    entrypoint: ["openclaw"]
+    profiles:
+      - cli

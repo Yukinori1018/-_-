@@ -1,0 +1,17 @@
+# 環境変数 (トークン等の機密情報)
+.env
+openclaw-bots/*/.env
+
+# Docker
+docker-compose.extra.yml
+
+# OpenClaw データ
+openclaw-bots/*/data/
+openclaw-bots/*/workspace/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# ログ
+*.log
