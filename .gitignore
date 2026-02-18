@@ -5,9 +5,9 @@ openclaw-bots/*/.env
 # Docker
 docker-compose.extra.yml
 
-# OpenClaw データ
+# OpenClaw ランタイムデータ (workspace内のSOUL.md等はGit管理する)
 openclaw-bots/*/data/
-openclaw-bots/*/workspace/
+openclaw-bots/*/workspace/memory/
 
 # OS
 .DS_Store

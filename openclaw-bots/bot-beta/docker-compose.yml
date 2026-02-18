@@ -14,6 +14,8 @@ services:
       - .env
     environment:
       - OPENCLAW_INSTANCE_NAME=beta
+      # ワーカー: 高速・低コストモデルを使用
+      - OPENCLAW_DEFAULT_MODEL=anthropic/claude-sonnet-4-5
     security_opt:
       - no-new-privileges:true
 

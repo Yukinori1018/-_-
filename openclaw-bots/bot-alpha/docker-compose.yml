@@ -14,6 +14,8 @@ services:
       - .env
     environment:
       - OPENCLAW_INSTANCE_NAME=alpha
+      # 統括役: 高精度モデルを使用
+      - OPENCLAW_DEFAULT_MODEL=anthropic/claude-opus-4-5
     security_opt:
       - no-new-privileges:true
 
